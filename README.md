@@ -1,5 +1,4 @@
-Repo structure looks good. The README needs to sound more human and direct. Here's a rewrite:
-markdown# memlay.nvim
+# memlay.nvim
 
 Visualizes C struct memory layout in a Neovim floating window.
 
