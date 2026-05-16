@@ -7,7 +7,7 @@ are data, which are padding, and how to reorder fields to eliminate waste.
 
 ---
 
-## The classic problem
+## The Classic Problem
 
 ```c
 struct Foo {
