@@ -24,14 +24,13 @@ looks like 6 bytes but is actually 12. memlay makes this immediately visible and
 
 ## Features
 
-- Accurate ABI layout via libclang — not guesswork, not regex
+- Accurate ABI layout via libclang
 - Proportional memory map showing used bytes vs padding
 - Byte counts inside each field block
 - Reorder suggestion with exact bytes saved
 - Detects already-optimal structs
 - Vertical mode for structs with many fields
 - Works with typedef struct, pointers, arrays, uint*_t, bool
-- Zero config — works out of the box for most setups
 
 ---
 
