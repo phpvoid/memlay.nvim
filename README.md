@@ -1,14 +1,14 @@
-# memlay.nvim
+Repo structure looks good. The README needs to sound more human and direct. Here's a rewrite:
+markdown# memlay.nvim
 
-Memory layout visualizer for C structs inside Neovim.
+Visualizes C struct memory layout in a Neovim floating window.
 
-Put your cursor on any struct and hit `<leader>ml`. memlay shows you exactly how the struct is laid out in memory, which bytes are data, which are padding, and how to fix it.
+Hit `<leader>ml` with your cursor inside any struct. Shows which bytes
+are data, which are padding, and how to reorder fields to eliminate waste.
 
 ---
 
-## Why
-
-Padding waste in C structs is invisible and easy to miss. A struct like:
+## The problem
 
 ```c
 struct Foo {
@@ -18,44 +18,43 @@ struct Foo {
 };
 ```
 
-looks like 6 bytes but is actually 12. memlay makes this immediately visible and tells you exactly how to fix it.
+This is 12 bytes, not 6. The compiler inserts 3 bytes of padding after
+`x` and 3 bytes after `flag` to satisfy alignment requirements. memlay
+makes this visible and tells you the optimal field order.
 
 ---
 
 ## Features
 
-- Accurate ABI layout via libclang
-- Proportional memory map showing used bytes vs padding
-- Byte counts inside each field block
-- Reorder suggestion with exact bytes saved
-- Detects already-optimal structs
-- Vertical mode for structs with many fields
-- Works with typedef struct, pointers, arrays, uint*_t, bool
+- ABI-accurate layout via libclang
+- Proportional memory map with byte counts
+- Padding waste highlighted per field
+- Reorder suggestion with bytes saved
+- Vertical mode for large structs
+- Handles pointers, arrays, typedefs, uint*_t, bool
 
 ---
 
 ## Install
 
-### lazy.nvim (recommended)
+**lazy.nvim**
 
 ```lua
 {
-  "phpopko/memlay.nvim",
+  "phpvoid/memlay.nvim",
   build = "make -C c/",
   ft    = { "c", "cpp" },
   config = function()
-    require("memlay").setup({
-      keymap = "ml",
-    })
+    require("memlay").setup()
   end,
 }
 ```
 
-### packer.nvim
+**packer**
 
 ```lua
 use {
-  "phpopko/memlay.nvim",
+  "phpvoid/memlay.nvim",
   run    = "make -C c/",
   config = function() require("memlay").setup() end,
 }
@@ -65,16 +64,11 @@ use {
 
 ## Requirements
 
-| Requirement | Version |
-|---|---|
-| Neovim | >= 0.9 (LuaJIT required) |
-| libclang | >= 14 |
-| clang + make | for building from source |
-
-### Install libclang
+- Neovim >= 0.9 with LuaJIT
+- libclang >= 14
 
 ```bash
-# Ubuntu / Debian
+# Ubuntu/Debian
 sudo apt install libclang-dev
 
 # Arch
@@ -88,65 +82,33 @@ brew install llvm
 ```
 
 If libclang is in a non-standard location:
-
 ```bash
-export LLVM_PATH=/path/to/your/llvm
+export LLVM_PATH=/path/to/llvm
 ```
 
 ---
 
 ## Usage
 
-| Action | Default |
-|---|---|
-| Show layout | `<leader>ml` |
-| Close window | `q` or `<Esc>` |
-| Scroll (large structs) | `j` / `k` |
+| Key | Action |
+|-----|--------|
+| `<leader>ml` | Show layout |
+| `q` / `<Esc>` | Close |
+| `j` / `k` | Scroll (large structs) |
 
-Place your cursor anywhere inside a struct definition and trigger the keymap. The popup opens above the struct so it never covers what you're reading.
-
----
-
-## How it works
-
-memlay has two layers:
-
-**C layer** (`c/parse.c`, `c/layout.c`) — uses libclang to parse the file, find the struct at the cursor position, extract field sizes and alignments, and compute the ABI layout with the four standard alignment rules. Built as a shared library (`libmemlay.so`). The layout logic is fully independent of libclang and tested standalone via `test_layout.c`.
-
-**Lua layer** (`lua/memlay/`) — loads the library via LuaJIT FFI, calls `analyze_struct(filepath, line, col)`, and renders the result in a floating window using Neovim's buffer and highlight API.
-
-No LSP required. No Treesitter. libclang gives accurate results for any type the compiler would accept — pointers, arrays, typedefs, nested structs.
-
----
-
-## Troubleshooting
-
-Run `:checkhealth memlay` — it tells you exactly what is missing:
-memlay
-OK   Neovim >= 0.9
-OK   LuaJIT 2.1.0
-OK   libclang: /usr/lib/llvm-17/lib/libclang.so
-OK   libmemlay.so (prebuilt): .../prebuilt/linux-x86_64/libmemlay.so
-OK   clang: /usr/bin/clang
-OK   make: /usr/bin/make
-
-If `libmemlay.so` is missing, run `:MemlayBuild` to compile from source.
-
-If libclang is not found, set `LLVM_PATH`:
-
-```bash
-export LLVM_PATH=/path/to/your/llvm
-```
+Cursor can be anywhere inside the struct definition.
 
 ---
 
 ## Commands
 
 | Command | Description |
-|---|---|
-| `:MemlayBuild` | Build `libmemlay.so` from source |
-| `:MemlayReload` | Reload plugin after build |
-| `:MemlayDebug` | Print raw layout values for struct at cursor |
+|---------|-------------|
+| `:MemlayBuild` | Compile libmemlay.so from source |
+| `:MemlayReload` | Reload after build |
+| `:MemlayDebug` | Print raw layout values at cursor |
+
+Run `:checkhealth memlay` to diagnose setup issues.
 
 ---
 
@@ -154,12 +116,11 @@ export LLVM_PATH=/path/to/your/llvm
 
 ```lua
 require("memlay").setup({
-  keymap = "<leader>ml",  -- set to false to disable default keymap
+  keymap = "ml",  -- false to disable
 })
 ```
 
-Override highlight colors in your config:
-
+Highlight groups:
 ```lua
 vim.api.nvim_set_hl(0, "MemlayField", { bg = "#5fafd7", fg = "#000000" })
 vim.api.nvim_set_hl(0, "MemlayPad",   { bg = "#4e4e4e", fg = "#000000" })
@@ -167,29 +128,23 @@ vim.api.nvim_set_hl(0, "MemlayPad",   { bg = "#4e4e4e", fg = "#000000" })
 
 ---
 
-## Building from source
+## How it works
 
-```bash
-git clone https://github.com/phpopko/memlay.nvim
-cd memlay.nvim/c
-make
-```
+Two components:
 
-Requires `clang` and `libclang-dev`. Output is `lua/memlay/libmemlay.so`.
-
-To run the standalone layout tests with no libclang dependency:
-
-```bash
-make test_layout
-```
+- `c/parse.c` — libclang walks the AST to find the struct at the cursor
+  position and extracts field types, sizes, and alignments
+- `c/layout.c` — applies the four standard ABI alignment rules to compute
+  offsets and padding; no libclang dependency, tested standalone
+- `lua/memlay/` — LuaJIT FFI calls into the shared library, renders
+  results using the Neovim buffer and highlight API
 
 ---
 
 ## Limitations
 
-- C and C++ (C-style structs) only
+- C and C++ only
 - Bitfields are skipped
-- File must be saved — memlay parses from disk, not the buffer
-- Prebuilt binaries are currently provided for Linux x86_64 only — other platforms build from source via `:MemlayBuild`
+- Buffer must be saved before triggering
 
 ---
