@@ -2,7 +2,7 @@
 
 Memory layout visualizer for C structs inside Neovim.
 
-Put your cursor on any struct and hit `<leader>ml`. memlay shows you exactly how the struct is laid out in memory — which bytes are data, which are padding, and how to fix it.
+Put your cursor on any struct and hit `<leader>ml`. memlay shows you exactly how the struct is laid out in memory, which bytes are data, which are padding, and how to fix it.
 
 ---
 
