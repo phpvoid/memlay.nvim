@@ -142,7 +142,7 @@ Two components:
 
 ## Limitations
 
-- C and C++ only
+- C-style structs
 - Bitfields are skipped
 - Buffer must be saved before triggering
 
