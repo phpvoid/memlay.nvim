@@ -1,5 +1,7 @@
 # memlay.nvim
 
+![demo](assets/demo.png)
+
 Visualizes C struct memory layout in a Neovim floating window.
 
 Hit `<leader>ml` with your cursor inside any struct. Shows which bytes
