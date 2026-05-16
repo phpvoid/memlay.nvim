@@ -1,0 +1,8 @@
+lua/memlay/libmemlay.so
+c/test_layout
+c/*.o
+*.swp
+*.swo
+.nvim/
+.DS_Store
+Thumbs.db

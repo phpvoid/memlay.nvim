@@ -1,0 +1,38 @@
+name: Build prebuilt binaries
+on:
+  push:
+    branches: [main]
+    paths: ["c/**"]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: linux-x86_64
+            install: sudo apt install -y libclang-dev
+          - os: ubuntu-22.04-arm
+            target: linux-aarch64
+            install: sudo apt install -y libclang-dev
+          - os: macos-13
+            target: darwin-x86_64
+            install: brew install llvm
+          - os: macos-14
+            target: darwin-arm64
+            install: brew install llvm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: ${{ matrix.install }}
+      - name: Build
+        run: make -C c/
+      - name: Stage prebuilt
+        run: |
+          mkdir -p prebuilt/${{ matrix.target }}
+          cp lua/memlay/libmemlay.so prebuilt/${{ matrix.target }}/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: prebuilt/${{ matrix.target }}/libmemlay.so
