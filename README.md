@@ -188,7 +188,7 @@ make test_layout
 
 ## Limitations
 
-- C and C++ only
+- C and C++ (C-style structs) only
 - Bitfields are skipped
 - File must be saved — memlay parses from disk, not the buffer
 - Prebuilt binaries are currently provided for Linux x86_64 only — other platforms build from source via `:MemlayBuild`
