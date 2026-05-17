@@ -9,22 +9,6 @@ are data, which are padding, and how to reorder fields to eliminate waste.
 
 ---
 
-## The Classic Problem
-
-```c
-struct Foo {
-    char x;    // 1B
-    int  n;    // 4B
-    char flag; // 1B
-};
-```
-
-This is 12 bytes, not 6. The compiler inserts 3 bytes of padding after
-`x` and 3 bytes after `flag` to satisfy alignment requirements. memlay
-makes this visible and tells you the optimal field order.
-
----
-
 ## Features
 
 - ABI-accurate layout via libclang
