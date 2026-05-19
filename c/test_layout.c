@@ -30,7 +30,7 @@ static int tests_failed = 0;
     if (strcmp((expect), (actual)) != 0) { FAIL("expected '%s', got '%s'", expect, actual); return; } \
 } while(0)
 
-/* ── Test helpers ── */
+// test helpers
 
 static FieldInfo fi(const char *name, size_t size, size_t align) {
     FieldInfo f;
@@ -66,7 +66,7 @@ static void run_test(const char *desc, FieldInfo *fields, int count,
     PASS();
 }
 
-/* ── Tests ── */
+// tests
 
 static void test_char_int_char(void) {
     FieldInfo f[] = { fi("a", 1, 1), fi("b", 4, 4), fi("c", 1, 1) };
