@@ -49,8 +49,7 @@ use {
 
 ## Requirements
 
-- Neovim >= 0.9 with LuaJIT
-- libclang >= 14
+- libclang 14 and up
 
 ```bash
 # Ubuntu/Debian
