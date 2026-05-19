@@ -2,8 +2,8 @@ local ffi = require("ffi")
 
 ffi.cdef[[
   typedef struct {
-    char   name[128];
-    char   type_name[64];
+    char name[128];
+    char type_name[64];
     size_t size;
     size_t align;
     size_t offset;
@@ -12,13 +12,13 @@ ffi.cdef[[
 
   typedef struct {
     FieldInfo fields[64];
-    int       field_count;
-    size_t    total_size;
-    size_t    packed_size;
-    char      suggestion[1024];
-    char      struct_name[128];
-    int       struct_start_line;
-    int       struct_end_line;
+    int field_count;
+    size_t total_size;
+    size_t packed_size;
+    char suggestion[1024];
+    char struct_name[128];
+    int struct_start_line;
+    int struct_end_line;
   } LayoutResult;
 
   LayoutResult analyze_struct(const char *filepath, int line, int col);
