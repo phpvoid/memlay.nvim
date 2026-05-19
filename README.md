@@ -120,8 +120,6 @@ Two components:
   position and extracts field types, sizes, and alignments
 - `c/layout.c` — applies the four standard ABI alignment rules to compute
   offsets and padding; no libclang dependency, tested standalone
-- `lua/memlay/` — LuaJIT FFI calls into the shared library, renders
-  results using the Neovim buffer and highlight API
 
 ---
 
