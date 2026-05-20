@@ -11,8 +11,6 @@ are data, which are padding, and how to reorder fields to eliminate waste.
 
 ## Features
 
-- ABI-accurate layout via libclang
-- Proportional memory map with byte counts
 - Padding waste highlighted per field
 - Reorder suggestion with bytes saved
 - Vertical mode for large structs
